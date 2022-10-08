@@ -1,0 +1,27 @@
+{
+  "include": [
+    "./intro/**/*.ts",
+  ],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "strict": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "sourceMap": false,
+    "target": "ES6",
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+    "module": "ES6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "declaration": true,
+    "importHelpers": false,
+    "lib": ["DOM", "ESNext"],
+    "types": ["jest"]
+  }
+}

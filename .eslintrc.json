@@ -1,0 +1,61 @@
+{
+  "extends": [
+    "airbnb/base"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "jest"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 100,
+        "ignoreStrings": true
+      }
+    ],
+    "no-param-reassign": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/no-unresolved": 0,
+    "import/prefer-default-export": 0,
+    "indent": [
+      2,
+      2,
+      {
+        "flatTernaryExpressions": true
+      }
+    ],
+    "no-unused-vars": "off",
+    "no-tabs": "error",
+    "no-nested-ternary": 0,
+    "import/extensions": 0,
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "operator-linebreak": 0,
+    "no-underscore-dangle": 0,
+    "@typescript-eslint/no-unused-vars": [
+      "error"
+    ],
+    "no-undef": "off",
+    "no-useless-constructor": "off",
+    "no-empty-function": "off",
+    "class-methods-use-this": "off",
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
+  },
+  "env": {
+    "jest/globals": true,
+    "shared-node-browser": true
+  },
+  "ignorePatterns": [
+    "examples/**/*",
+    "lib/**/*",
+    "esm/**/*"
+  ]
+}
