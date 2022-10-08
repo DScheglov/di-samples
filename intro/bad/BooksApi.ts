@@ -1,5 +1,5 @@
 import ApiClient from './ApiClient';
-import { isRequestError } from './RequestError';
+import { isRequestError } from '../common/RequestError';
 
 export type ServerBookModel = {
   id: string;
