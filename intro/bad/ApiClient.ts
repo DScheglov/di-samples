@@ -11,7 +11,7 @@ export default class ApiClient {
   private _request(
     method: string,
     path: string,
-    body?: string | null,
+    body?: any,
     headers?: HeadersInit,
   ): RequestParams {
     return [
@@ -19,7 +19,7 @@ export default class ApiClient {
       {
         method,
         headers: { ...this._headers, ...headers },
-        body,
+        body: body != null ? JSON.stringify(body) : undefined,
       },
     ];
   }
@@ -45,21 +45,21 @@ export default class ApiClient {
 
   protected async post(path: string, body: any, headers?: HeadersInit) {
     const responseBody = await this._send(
-      this._request('POST', path, body && JSON.stringify(body), headers),
+      this._request('POST', path, body, headers),
     );
     return this.readBody(responseBody);
   }
 
   protected async put(path: string, body: any, headers?: HeadersInit) {
     const responseBody = await this._send(
-      this._request('PUT', path, body && JSON.stringify(body), headers),
+      this._request('PUT', path, body, headers),
     );
     return this.readBody(responseBody);
   }
 
   protected async patch(path: string, body: any, headers?: HeadersInit) {
     const responseBody = await this._send(
-      this._request('PATCH', path, body && JSON.stringify(body), headers),
+      this._request('PATCH', path, body, headers),
     );
     return this.readBody(responseBody);
   }
