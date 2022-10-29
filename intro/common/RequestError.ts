@@ -1,13 +1,5 @@
 export default class RequestError extends Error {
-  public get status() {
-    return this._response.status;
-  }
-
-  public get statusText() {
-    return this._response.statusText;
-  }
-
-  hasStatus(status: Response['status']) {
+  hasStatus(status: number) {
     return this.status === status;
   }
 
@@ -38,11 +30,12 @@ export default class RequestError extends Error {
   constructor(
     url: string,
     method: string | undefined,
-    private readonly _response: Pick<Response, 'status' | 'statusText'>,
+    public readonly status: number,
+    public readonly statusText: string,
   ) {
     super(
       `Request [${method ?? 'GET'} ${url}] Failed: ` +
-      `${_response.status} - ${_response.statusText}`,
+      `${status} - ${statusText}`,
     );
 
     Object.defineProperty(this, 'name', {
