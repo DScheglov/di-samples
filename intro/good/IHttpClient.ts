@@ -16,3 +16,7 @@ export interface IHttpClient {
   patch<T, P>(path: string, body: P, headers?: HeadersInit): DefferedResponse<T>;
   delete<T>(path: string, headers?: HeadersInit): DefferedResponse<T>;
 }
+
+export const HTTP_OK = 200;
+export const HTTP_CREATE_OK = 201;
+export const HTTP_NOT_FOUND = 404;

@@ -50,7 +50,7 @@ describe('BooksApi', () => {
 
       await expect(books.getAll())
         .rejects
-        .toThrowError('Failed to fetch Books: 405 - Not Supported');
+        .toThrowError('Failed to fetch books: 405 - Not Supported');
     });
   });
 });

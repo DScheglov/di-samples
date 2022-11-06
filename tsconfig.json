@@ -7,7 +7,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "target": "ES6",
     "alwaysStrict": true,
     "noImplicitAny": true,

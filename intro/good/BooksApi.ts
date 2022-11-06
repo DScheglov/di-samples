@@ -1,54 +1,47 @@
-import {
-  CreatePayload, CreateResponse, GetAllResponse, GetByIdResponse, ServerResponse,
-} from './Books.ServerTypes';
-import type { IBooksApi, CreateBookData, Book } from './IBooksApi';
-import type { IHttpClient, Response } from './IHttpClient';
+import type { Book, CreateBookData, IBooksApi } from './IBooksApi';
+import * as Server from './Books.ServerTypes';
+import * as Http from './IHttpClient';
 
 export default class BooksApi implements IBooksApi {
-  constructor(private readonly http: Pick<IHttpClient, 'get' | 'post'>) {}
+  constructor(private readonly http: Pick<Http.IHttpClient, 'get' | 'post'>) {}
 
-  private static readDataFromBody <T>({ body }: Response<ServerResponse<T>>) {
+  async getAll(): Promise<Book[]> {
+    const { status, statusText, body } = await this
+      .http
+      .get<Server.GetAllResponse>('/books');
+
+    if (status !== Http.HTTP_OK) {
+      throw new Error(`Failed to fetch books: ${status} - ${statusText}`);
+    }
+
     return body.data;
   }
 
-  private static hasStatus({ status }: Response<any>, expectedStatus: number) {
-    return status === expectedStatus;
-  }
-
-  private static rejectError(message: string, { status, statusText }: Response<any>) {
-    return Promise.reject(new Error(`${message}: ${status} - ${statusText}`));
-  }
-
-  getAll(): Promise<Book[]> {
-    return this
+  async getById(bookId: string): Promise<Book | null> {
+    const { status, statusText, body } = await this
       .http
-      .get<GetAllResponse>('/books')
-      .then(response => (
-        BooksApi.hasStatus(response, 200)
-          ? BooksApi.readDataFromBody(response)
-          : BooksApi.rejectError('Failed to fetch Books', response)
-      ));
+      .get<Server.GetByIdResponse>(`/books/${bookId}`);
+
+    if (status === Http.HTTP_NOT_FOUND) return null;
+
+    if (status !== Http.HTTP_OK) {
+      throw new Error(`Failed to fetch Book<${bookId}>: ${status} - ${statusText}`);
+    }
+
+    return body.data;
   }
 
-  getById(bookId: string): Promise<Book | null> {
-    return this
+  async create(bookData: CreateBookData): Promise<Book> {
+    const { status, statusText, body } = await this
       .http
-      .get<GetByIdResponse>(`/books/${bookId}`)
-      .then(response => (
-        BooksApi.hasStatus(response, 200) ? BooksApi.readDataFromBody(response) :
-        BooksApi.hasStatus(response, 404) ? null :
-        BooksApi.rejectError(`Failed to fetch Book<${bookId}>`, response)
-      ));
-  }
+      .post<Server.CreateResponse, Server.CreatePayload>('/books', bookData);
 
-  create(bookData: CreateBookData): Promise<Book> {
-    return this
-      .http
-      .post<CreateResponse, CreatePayload>('/books', bookData)
-      .then(response => (
-        BooksApi.hasStatus(response, 201)
-          ? BooksApi.readDataFromBody(response)
-          : BooksApi.rejectError(`Failed to Create Book<${bookData.isbn.join(', ')}>`, response)
-      ));
+    if (status !== Http.HTTP_CREATE_OK) {
+      throw new Error(
+        `Failed to Create Book<${bookData.isbn.join(', ')}>: ${status} - ${statusText}`,
+      );
+    }
+
+    return body.data;
   }
 }
