@@ -29,7 +29,7 @@ export default class ApiClient {
 
     if (response.ok) return response.json();
 
-    throw new RequestError(url, requestInit.method, response);
+    throw new RequestError(url, requestInit.method, response.status, response.statusText);
   }
 
   protected readBody(body: any) {

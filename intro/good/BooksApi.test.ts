@@ -13,7 +13,12 @@ describe('BooksApi', () => {
     it('calls GET /books', async () => {
       expect.assertions(1);
 
-      get.mockResolvedValueOnce({ data: [] });
+      get.mockResolvedValueOnce({
+        status: 200,
+        statusText: 'Ok',
+        headers: {},
+        body: { data: [] },
+      });
 
       await books.getAll();
 
@@ -23,9 +28,29 @@ describe('BooksApi', () => {
     it('reads data from response body', async () => {
       expect.assertions(1);
 
-      get.mockResolvedValueOnce({ data: [] });
+      get.mockResolvedValueOnce({
+        status: 200,
+        statusText: 'Ok',
+        headers: {},
+        body: { data: [] },
+      });
 
       expect(await books.getAll()).toEqual([]);
+    });
+
+    it('throws an error if response status is not equal to 200', async () => {
+      expect.assertions(1);
+
+      get.mockResolvedValueOnce({
+        status: 405,
+        statusText: 'Not Supported',
+        headers: {},
+        body: { data: [] },
+      });
+
+      await expect(books.getAll())
+        .rejects
+        .toThrowError('Failed to fetch Books: 405 - Not Supported');
     });
   });
 });
