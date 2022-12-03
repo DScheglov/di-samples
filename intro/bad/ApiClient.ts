@@ -1,4 +1,4 @@
-import RequestError from '../common/RequestError';
+import RequestError from './RequestError';
 
 type RequestParams = [string, RequestInit];
 

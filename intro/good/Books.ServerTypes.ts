@@ -2,25 +2,18 @@
  * Automaticaly generated file (from books.swagger)
  */
 
-export type ServerBookModel = {
+type ResponseBody<T> = { data: T };
+
+export type Book = {
   id: string;
-  title: string;
-  publishingYear: number;
-  authors: string[];
-  isbn: string[];
-};
-
-export type ServerResponse<T> = { data: T; };
-
-export type GetAllResponse = ServerResponse<ServerBookModel[]>;
-
-export type GetByIdResponse = ServerResponse<ServerBookModel>;
-
-export type CreatePayload = {
   title: string;
   publishingYear: number;
   authors: string[];
   isbn: string[];
 }
 
-export type CreateResponse = ServerResponse<ServerBookModel>;
+export type GetAllResponseBody = ResponseBody<Book[]>;
+
+export type GetByIdResponseBody = ResponseBody<Book>;
+
+export type CreateResponseBody = ResponseBody<Book>;

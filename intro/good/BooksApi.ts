@@ -1,47 +1,40 @@
 import type { Book, CreateBookData, IBooksApi } from './IBooksApi';
-import * as Server from './Books.ServerTypes';
-import * as Http from './IHttpClient';
+import { CreateResponseBody, GetAllResponseBody, GetByIdResponseBody } from './Books.ServerTypes';
+import {
+  HTTP_CREATED, HTTP_NOT_FOUND, HTTP_OK, IHttpClient,
+} from './IHttpClient';
+import { throwError } from './throwError';
 
 export default class BooksApi implements IBooksApi {
-  constructor(private readonly http: Pick<Http.IHttpClient, 'get' | 'post'>) {}
+  constructor(private readonly http: Pick<IHttpClient, 'get' | 'post'>) {}
 
-  async getAll(): Promise<Book[]> {
-    const { status, statusText, body } = await this
-      .http
-      .get<Server.GetAllResponse>('/books');
-
-    if (status !== Http.HTTP_OK) {
-      throw new Error(`Failed to fetch books: ${status} - ${statusText}`);
-    }
-
-    return body.data;
+  getAll(): Promise<Book[]> {
+    return this.http.get('/books').then(
+      ({ status, statusText, body }) => (
+        status === HTTP_OK
+          ? (body as GetAllResponseBody).data
+          : throwError(`Failed to fetch books: ${status} - ${statusText}`)
+      ),
+    );
   }
 
-  async getById(bookId: string): Promise<Book | null> {
-    const { status, statusText, body } = await this
-      .http
-      .get<Server.GetByIdResponse>(`/books/${bookId}`);
-
-    if (status === Http.HTTP_NOT_FOUND) return null;
-
-    if (status !== Http.HTTP_OK) {
-      throw new Error(`Failed to fetch Book<${bookId}>: ${status} - ${statusText}`);
-    }
-
-    return body.data;
+  getById(bookId: string): Promise<Book | null> {
+    return this.http.get(`/books/${bookId}`).then(
+      ({ status, statusText, body }) => (
+        status === HTTP_OK ? (body as GetByIdResponseBody).data :
+        status === HTTP_NOT_FOUND ? null :
+        throwError(`Failed to fetch Book<${bookId}>: ${status} - ${statusText}`)
+      ),
+    );
   }
 
-  async create(bookData: CreateBookData): Promise<Book> {
-    const { status, statusText, body } = await this
-      .http
-      .post<Server.CreateResponse, Server.CreatePayload>('/books', bookData);
-
-    if (status !== Http.HTTP_CREATE_OK) {
-      throw new Error(
-        `Failed to Create Book<${bookData.isbn.join(', ')}>: ${status} - ${statusText}`,
-      );
-    }
-
-    return body.data;
+  create(bookData: CreateBookData): Promise<Book> {
+    return this.http.post('/books', bookData).then(
+      ({ status, statusText, body }) => (
+        status === HTTP_CREATED
+          ? (body as CreateResponseBody).data
+          : throwError(`Failed to create Book<${bookData.isbn.join(', ')}>: ${status} - ${statusText}`)
+      ),
+    );
   }
 }
