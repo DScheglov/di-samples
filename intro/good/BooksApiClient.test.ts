@@ -1,9 +1,9 @@
-import BooksApi from './BooksApi';
+import BooksApiClient from './BooksApiClient';
 
 describe('BooksApi', () => {
   const get = jest.fn();
   const post = jest.fn();
-  const books = new BooksApi({ get, post });
+  const books = new BooksApiClient({ get, post });
 
   afterEach(() => {
     jest.clearAllMocks();

@@ -1,20 +1,30 @@
-export type Headers = Record<string, string>;
+export type HeadersRecord = Record<string, string>
 
-export type Response = {
+export type Response<T> = {
+  ok: boolean;
   status: number;
   statusText: string;
-  headers: Headers;
-  body: unknown;
+  headers: HeadersRecord;
+  body: T;
 }
 
 export interface IHttpClient {
-  get(path: string, headers?: HeadersInit): Promise<Response>;
-  post(path: string, body: any, headers?: HeadersInit): Promise<Response>;
-  put(path: string, body: any, headers?: HeadersInit): Promise<Response>;
-  patch(path: string, body: any, headers?: HeadersInit): Promise<Response>;
-  delete(path: string, headers?: HeadersInit): Promise<Response>;
+  get<T = unknown>(path: string, headers?: HeadersRecord): Promise<Response<T>>;
+  post<T = unknown>(path: string, body: any, headers?: HeadersRecord): Promise<Response<T>>;
+  put<T = unknown>(path: string, body: any, headers?: HeadersRecord): Promise<Response<T>>;
+  patch<T = unknown>(path: string, body: any, headers?: HeadersRecord): Promise<Response<T>>;
+  delete<T = unknown>(path: string, headers?: HeadersRecord): Promise<Response<T>>;
 }
 
-export const HTTP_OK = 200;
-export const HTTP_CREATED = 201;
-export const HTTP_NOT_FOUND = 404;
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  UNAUTHORIZED: 401,
+  NOT_PERMITTED: 403,
+  NOT_FOUND: 404,
+  METHOD_NOT_ALLOWED: 405,
+  NOT_ACCEPTABLE: 406,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  SERVER_INTERNAL_ERROR: 500,
+} as const;

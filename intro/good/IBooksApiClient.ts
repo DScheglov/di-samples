@@ -8,7 +8,7 @@ export type Book = {
 
 export type CreateBookData = Omit<Book, 'id'>;
 
-export interface IBooksApi {
+export interface IBooksApiClient {
   getAll(): Promise<Book[]>;
   getById(bookId: string): Promise<Book | null>;
   create(bookData: CreateBookData): Promise<Book>;
