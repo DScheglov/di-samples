@@ -1,19 +1,19 @@
 export type HeadersRecord = Record<string, string>
 
-export type Response<T> = {
+export type Response = {
   ok: boolean;
   status: number;
   statusText: string;
   headers: HeadersRecord;
-  body: T;
+  body: unknown;
 }
 
 export interface IHttpClient {
-  get<T = unknown>(path: string, headers?: HeadersRecord): Promise<Response<T>>;
-  post<T = unknown>(path: string, body: any, headers?: HeadersRecord): Promise<Response<T>>;
-  put<T = unknown>(path: string, body: any, headers?: HeadersRecord): Promise<Response<T>>;
-  patch<T = unknown>(path: string, body: any, headers?: HeadersRecord): Promise<Response<T>>;
-  delete<T = unknown>(path: string, headers?: HeadersRecord): Promise<Response<T>>;
+  get(path: string, headers?: HeadersRecord): Promise<Response>;
+  post(path: string, body: any, headers?: HeadersRecord): Promise<Response>;
+  put(path: string, body: any, headers?: HeadersRecord): Promise<Response>;
+  patch(path: string, body: any, headers?: HeadersRecord): Promise<Response>;
+  delete(path: string, headers?: HeadersRecord): Promise<Response>;
 }
 
 export const HTTP_STATUS = {

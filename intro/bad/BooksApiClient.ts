@@ -27,7 +27,9 @@ export default class BooksApiClient extends JsonApiClient {
       const body = await this.get(`/books/${bookId}`);
       return body.data;
     } catch (error) {
-      if (error instanceof HttpError && error.response.status === 404) return null;
+      if (error instanceof HttpError && error.response.status === 404) {
+        return null;
+      }
       throw error;
     }
   }
